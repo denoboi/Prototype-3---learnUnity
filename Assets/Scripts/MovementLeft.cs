@@ -22,10 +22,10 @@ public class MovementLeft : MonoBehaviour
         {
             transform.Translate(Vector3.left * Time.deltaTime * speed);
         }
-        if (transform.position.x < leftBound && CompareTag("Obstacle"))
-        {
-            Destroy(gameObject);
-        }    
+        //if (transform.position.x < leftBound && CompareTag("Obstacle"))
+        //{
+        //    Destroy(gameObject);
+        //}    
      
     }
 }
