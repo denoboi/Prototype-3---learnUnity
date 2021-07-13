@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool isOnGround;
     public bool gameOver;
+    public bool doubleJumpUsed = false;
     
     void Start()
     {
@@ -37,17 +38,22 @@ public class PlayerController : MonoBehaviour
             dirtEffect.Stop();
             playerAnim.SetTrigger("Jump_trig");
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
-            
+            doubleJumpUsed = false;
+            isOnGround = false;
 
-            
+
         }
-        if (Input.GetKeyDown(KeyCode.Space) && !isOnGround && !gameOver)
+        else if (Input.GetKeyDown(KeyCode.Space) && !doubleJumpUsed && !gameOver)
         {
+            doubleJumpUsed = true;
             playerAudio.PlayOneShot(jumpAudio);
             dirtEffect.Stop();
             playerAnim.SetTrigger("Jump_trig");
-            playerRb.AddForce(Vector3.up * jumpForce * 2, ForceMode.Impulse);
+            playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
             isOnGround = false;
+            
+            
+
         }
 
     }
@@ -68,6 +74,8 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetInteger("DeathType_int", 1);
             dirtEffect.Stop();
             playerAudio.PlayOneShot(crashAudio);
+
+
             //if (gameOver == true && Input.GetKeyDown(KeyCode.Space))
             //{
                 
