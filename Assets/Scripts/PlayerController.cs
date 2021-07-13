@@ -37,6 +37,16 @@ public class PlayerController : MonoBehaviour
             dirtEffect.Stop();
             playerAnim.SetTrigger("Jump_trig");
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
+            
+
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Space) && !isOnGround && !gameOver)
+        {
+            playerAudio.PlayOneShot(jumpAudio);
+            dirtEffect.Stop();
+            playerAnim.SetTrigger("Jump_trig");
+            playerRb.AddForce(Vector3.up * jumpForce * 2, ForceMode.Impulse);
             isOnGround = false;
         }
 
