@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,7 +18,11 @@ public class PlayerController : MonoBehaviour
     public bool isOnGround;
     public bool gameOver;
     public bool doubleJumpUsed = false;
-    
+
+    public BoxCollider playerCollider;
+    float m_ScaleX, m_ScaleY, m_ScaleZ;
+    public Slider m_SliderX, m_SliderY, m_SliderZ;
+
     void Start()
     {
         playerAnim = GetComponent<Animator>();
@@ -25,8 +30,10 @@ public class PlayerController : MonoBehaviour
         dirtEffect = GameObject.Find("FX_DirtSplatter").GetComponent<
         ParticleSystem>();
         playerAudio = GetComponent<AudioSource>();
-        Physics.gravity *= gravityModifier; 
-        
+        Physics.gravity *= gravityModifier;
+
+        playerCollider = GetComponent<BoxCollider>();
+
     }
 
     // Update is called once per frame
@@ -55,11 +62,15 @@ public class PlayerController : MonoBehaviour
             
 
         }
+       
+
+
+
 
     }
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground")) //yere degdiginde isOnGround true
+        if (collision.gameObject.CompareTag("Ground") && !gameOver) //yere degdiginde isOnGround true ve dirt effecti durdurmak icin.
         {
             isOnGround = true;
             dirtEffect.Play();
@@ -75,6 +86,11 @@ public class PlayerController : MonoBehaviour
             dirtEffect.Stop();
             playerAudio.PlayOneShot(crashAudio);
 
+            
+
+            //after collision, collider changes to prevent bugs
+            playerCollider.center = new Vector3(0, 1.5f, -3);
+
 
             //if (gameOver == true && Input.GetKeyDown(KeyCode.Space))
             //{
@@ -84,5 +100,7 @@ public class PlayerController : MonoBehaviour
                 
         }
     }   
+
+    
 
 }
