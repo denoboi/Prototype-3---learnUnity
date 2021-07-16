@@ -47,8 +47,6 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
             doubleJumpUsed = false;
             isOnGround = false;
-
-
         }
         else if (Input.GetKeyDown(KeyCode.Space) && !doubleJumpUsed && !gameOver)
         {
@@ -58,9 +56,14 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetTrigger("Jump_trig");
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
             isOnGround = false;
+           
+        }
+        else if(Input.GetKeyDown(KeyCode.C) && isOnGround && !gameOver)
+        {
+            playerCollider.size = new Vector3(1, 1.5f, 0.6f);
+            playerCollider.center = new Vector3(0, 0.5f, 0);
+            playerAnim.SetTrigger("Crouch_b");
             
-            
-
         }
        
 
@@ -101,6 +104,14 @@ public class PlayerController : MonoBehaviour
         }
     }   
 
+    void Dash()
+    {
+        if(Input.GetKeyDown(KeyCode.D) && !isOnGround && !gameOver)
+        {
+            particleExplosion.Play();
+
+        }
+    }    
     
 
 }
