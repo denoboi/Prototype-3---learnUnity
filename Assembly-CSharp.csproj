@@ -56,6 +56,8 @@
      <Compile Include="Assets\_Gloomy_Animal\Script\CharacterSelect.cs" />
      <Compile Include="Assets\_Gloomy_Animal\Script\MouseOrbitImproved.cs" />
      <Compile Include="Assets\Scripts\BackgroundRepeater.cs" />
+     <Compile Include="Assets\Scripts\ChickenMovement.cs" />
+     <Compile Include="Assets\Scripts\ChickenSpawn.cs" />
      <Compile Include="Assets\Scripts\MovementLeft.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\RestartManager.cs" />

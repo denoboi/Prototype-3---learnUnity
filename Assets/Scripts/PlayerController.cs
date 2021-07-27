@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
             doubleJumpUsed = false;
             isOnGround = false;
+            playerAnim.SetBool("Crouch_b",false);
+            
         }
         else if (Input.GetKeyDown(KeyCode.Space) && !doubleJumpUsed && !gameOver)
         {
@@ -60,19 +62,18 @@ public class PlayerController : MonoBehaviour
         }
         else if(Input.GetKey(KeyCode.C) && isOnGround && !gameOver)
         {
-            playerCollider.size = new Vector3(1, 1.4f, 0.6f);
-            playerCollider.center = new Vector3(0, 0.6f, 0);
             playerAnim.SetBool("Crouch_b",true);
-           
-
-           
+            playerCollider.size = new Vector3(1, 2f, 0.6f);
+            playerCollider.center = new Vector3(0, 0.9f, 0);
             
+               
         }
         else if(Input.GetKeyUp(KeyCode.C))
         {
             playerAnim.SetBool("Crouch_b",false);
             playerCollider.size = new Vector3(1, 3f, 0.6f);
             playerCollider.center = new Vector3(0, 1.5f, 0);
+            
         }
        
 
@@ -110,6 +111,18 @@ public class PlayerController : MonoBehaviour
             //    SceneManager.LoadScene("Prototype 3");
             //}
                 
+        }
+        else if (collision.gameObject.CompareTag("Bird"))
+        {
+            Debug.Log("GameOver");
+            gameOver = true;
+            particleExplosion.Play(); 
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
+            dirtEffect.Stop();
+            playerAudio.PlayOneShot(crashAudio);
+            
+            playerCollider.center = new Vector3(0, 1.5f, -3);
         }
     }   
 
