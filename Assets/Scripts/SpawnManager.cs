@@ -34,7 +34,7 @@ public class SpawnManager : MonoBehaviour
         
     {
 
-        spawnInterval = Random.Range(0.8f, 2.5f);
+        spawnInterval = Random.Range(0.8f, 4f);
         randomObstacle = Random.Range(0, obstaclePrefabs.Length);
         Instantiate(obstaclePrefabs[randomObstacle], spawnPos, obstaclePrefabs[randomObstacle].transform.rotation);
         Invoke("ObstacleSpawn", spawnInterval);

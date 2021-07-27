@@ -58,12 +58,21 @@ public class PlayerController : MonoBehaviour
             isOnGround = false;
            
         }
-        else if(Input.GetKeyDown(KeyCode.C) && isOnGround && !gameOver)
+        else if(Input.GetKey(KeyCode.C) && isOnGround && !gameOver)
         {
-            playerCollider.size = new Vector3(1, 1.5f, 0.6f);
-            playerCollider.center = new Vector3(0, 0.5f, 0);
-            playerAnim.SetTrigger("Crouch_b");
+            playerCollider.size = new Vector3(1, 1.4f, 0.6f);
+            playerCollider.center = new Vector3(0, 0.6f, 0);
+            playerAnim.SetBool("Crouch_b",true);
+           
+
+           
             
+        }
+        else if(Input.GetKeyUp(KeyCode.C))
+        {
+            playerAnim.SetBool("Crouch_b",false);
+            playerCollider.size = new Vector3(1, 3f, 0.6f);
+            playerCollider.center = new Vector3(0, 1.5f, 0);
         }
        
 
