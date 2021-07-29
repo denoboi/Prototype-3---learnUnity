@@ -15,7 +15,7 @@ public class ChickenSpawn : MonoBehaviour
     {
         //playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
         //Invoke("BirdSpawn", spawnInterval);
-        Invoke("BirdSpawn", spawnInterval);
+        Invoke("BirdSpawn", 3);
     }
 
     // Update is called once per frame
@@ -27,11 +27,11 @@ public class ChickenSpawn : MonoBehaviour
     public void BirdSpawn()
         
     {
-        int randomX = Random.Range(34,39);
-        int randomY = Random.Range(2,6);
+        float randomX = Random.Range(34,39);
+        float randomY = Random.Range(0.5f ,6);
         Vector3 randomSpawnpos = new Vector3(randomX, randomY, 0);
 
-        spawnInterval = Random.Range(3f, 6f);
+        spawnInterval = Random.Range(8f, 10f);
 
         randomBirds = Random.Range(0,2);
         
