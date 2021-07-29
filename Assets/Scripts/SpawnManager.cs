@@ -1,35 +1,45 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject obstaclePrefab;
-    private Vector3 spawnPos = new Vector3(25, 0, 0); 
-    private float startTime =1.5f;
-    private float repeatTime = 1.5f;
+    public GameObject[] obstaclePrefabs;
+    private Vector3 spawnPos = new Vector3(32, 1, 0);
+            
+    private float startTime =1f;
+    private float repeatTimemin = 0.8f;
+    private float repeatTimeMax = 3.0f;
+    private float spawnInterval;
     private PlayerController playerControllerScript;
-
+    private int randomObstacle;
    
     void Start()
     {
+        
         playerControllerScript = GameObject.Find("Player").GetComponent<PlayerController>();
-        InvokeRepeating("obstacleSpawn", startTime, repeatTime);
+        Invoke("ObstacleSpawn", spawnInterval);
     }
 
    
     void Update()
     {
         
+
+        if (playerControllerScript.gameOver)
+        {
+            CancelInvoke("ObstacleSpawn");
+
+        }
     }
-    void obstacleSpawn()
+    public void ObstacleSpawn()
         
     {
-        if (playerControllerScript.gameOver == false)
-        {
-            Instantiate(obstaclePrefab, spawnPos, obstaclePrefab.transform.rotation);
-        }
-            
+
+        spawnInterval = Random.Range(2f, 5f);
+        randomObstacle = Random.Range(0, obstaclePrefabs.Length);
+        Instantiate(obstaclePrefabs[randomObstacle], spawnPos, obstaclePrefabs[randomObstacle].transform.rotation);
+        Invoke("ObstacleSpawn", spawnInterval);
+
+
     }
 
 }

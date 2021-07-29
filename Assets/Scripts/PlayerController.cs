@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,7 +17,12 @@ public class PlayerController : MonoBehaviour
     public float gravityModifier;
     public bool isOnGround;
     public bool gameOver;
-    
+    public bool doubleJumpUsed = false;
+
+    public BoxCollider playerCollider;
+    float m_ScaleX, m_ScaleY, m_ScaleZ;
+    public Slider m_SliderX, m_SliderY, m_SliderZ;
+
     void Start()
     {
         playerAnim = GetComponent<Animator>();
@@ -24,8 +30,10 @@ public class PlayerController : MonoBehaviour
         dirtEffect = GameObject.Find("FX_DirtSplatter").GetComponent<
         ParticleSystem>();
         playerAudio = GetComponent<AudioSource>();
-        Physics.gravity *= gravityModifier; 
-        
+        Physics.gravity *= gravityModifier;
+
+        playerCollider = GetComponent<BoxCollider>();
+
     }
 
     // Update is called once per frame
@@ -37,13 +45,45 @@ public class PlayerController : MonoBehaviour
             dirtEffect.Stop();
             playerAnim.SetTrigger("Jump_trig");
             playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
+            doubleJumpUsed = false;
             isOnGround = false;
+            playerAnim.SetBool("Crouch_b",false);
+            
         }
+        else if (Input.GetKeyDown(KeyCode.Space) && !doubleJumpUsed && !gameOver)
+        {
+            doubleJumpUsed = true;
+            playerAudio.PlayOneShot(jumpAudio);
+            dirtEffect.Stop();
+            playerAnim.SetTrigger("Jump_trig");
+            playerRb.AddForce(Vector3.up * jumpForce , ForceMode.Impulse);
+            isOnGround = false;
+           
+        }
+        else if(Input.GetKey(KeyCode.C) && isOnGround && !gameOver)
+        {
+            playerAnim.SetBool("Crouch_b",true);
+            playerCollider.size = new Vector3(1, 2f, 0.6f);
+            playerCollider.center = new Vector3(0, 0.9f, 0);
+            
+               
+        }
+        else if(Input.GetKeyUp(KeyCode.C))
+        {
+            playerAnim.SetBool("Crouch_b",false);
+            playerCollider.size = new Vector3(1, 3f, 0.6f);
+            playerCollider.center = new Vector3(0, 1.5f, 0);
+            
+        }
+       
+
+
+
 
     }
     public void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground")) //yere degdiginde isOnGround true
+        if (collision.gameObject.CompareTag("Ground") && !gameOver) //yere degdiginde isOnGround true ve dirt effecti durdurmak icin.
         {
             isOnGround = true;
             dirtEffect.Play();
@@ -58,6 +98,13 @@ public class PlayerController : MonoBehaviour
             playerAnim.SetInteger("DeathType_int", 1);
             dirtEffect.Stop();
             playerAudio.PlayOneShot(crashAudio);
+
+            
+
+            //after collision, collider changes to prevent bugs
+            playerCollider.center = new Vector3(0, 1.5f, -3);
+
+
             //if (gameOver == true && Input.GetKeyDown(KeyCode.Space))
             //{
                 
@@ -65,6 +112,28 @@ public class PlayerController : MonoBehaviour
             //}
                 
         }
+        else if (collision.gameObject.CompareTag("Bird"))
+        {
+            Debug.Log("GameOver");
+            gameOver = true;
+            particleExplosion.Play(); 
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
+            dirtEffect.Stop();
+            playerAudio.PlayOneShot(crashAudio);
+            
+            playerCollider.center = new Vector3(0, 1.5f, -3);
+        }
     }   
+
+    void Dash()
+    {
+        if(Input.GetKeyDown(KeyCode.D) && !isOnGround && !gameOver)
+        {
+            particleExplosion.Play();
+
+        }
+    }    
+    
 
 }
